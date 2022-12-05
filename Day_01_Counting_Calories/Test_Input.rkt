@@ -1,4 +1,4 @@
-#lang reader "CountingCalories.rkt"
+#lang countingcaloriesdsl
 1000
 2000
 3000
