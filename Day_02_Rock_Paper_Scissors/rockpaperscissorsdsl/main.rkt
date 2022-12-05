@@ -13,7 +13,7 @@
     (syntax-parse stx
       ((_ hand ...)
        #'(#%module-begin
-           (let ((plays (apply split-twos (map translate (list hand ...)))))
+           (let ((plays (split-twos hand ...)))))
              (display "\nSolution part 1: ")
               (part1 plays)
              ))))))
@@ -24,15 +24,15 @@
     (apply + (map (λ (x) (apply score x)) plays))))
 
 ; translation
-(define translate
-  (λ (hand)
-    (match hand
-      (#\A  'rock)
-      (#\B  'paper)
-      (#\C  'scissors)
-      (#\X  'rock)
-      (#\Y  'paper)
-      (#\Z  'scissors))))
+; (define translate
+;   (λ (hand)
+;     (match hand
+;       (#\A  #\X
+;       (#\B  #\Y
+;       (#\C  #\Z
+;       (#\X  #\X
+;       (#\Y  #\Y
+;       (#\Z  #\Z)))
 
 ; split
 (define split-twos
@@ -50,20 +50,21 @@
 (define hand-score
   (λ (hand)
     (match hand
-      ('rock      1)
-      ('paper     2)
-      ('scissors  3))))
+      (#\A  1)  (#\X  1)
+      (#\B  2)  (#\Y  2)
+      (#\C  3)  (#\Z  3)
+      )))
 
 (define result-score
   (λ (op me)
     (match (list op me)
-      ((list 'rock     'paper)     6)
-      ((list 'scissors  'rock)     6)
-      ((list 'paper 'scissors)     6)
-      ((list 'paper       'paper)  3)
-      ((list 'scissors 'scissors)  3)
-      ((list 'rock         'rock)  3)
-      (else                        0))))
+      ((list #\A #\Y)  6)
+      ((list #\C #\X)  6)
+      ((list #\B #\Z)  6)
+      ((list #\B #\Y)  3)
+      ((list #\C #\Z)  3)
+      ((list #\A #\X)  3)
+      (else            0))))
 
 ; The reader
 (module reader racket
