@@ -15,7 +15,8 @@
        #'(#%module-begin
            (let ((plays (split-twos hand ...)))
              (display "\nSolution part 1: ")
-              (part1 plays)
+             (part1 plays)
+             (display "\nSolution part 2: ")
              ))))))
 
 ; solutions
@@ -23,16 +24,9 @@
   (λ (plays)
     (apply + (map (λ (x) (apply score x)) plays))))
 
-; translation
-; (define translate
-;   (λ (hand)
-;     (match hand
-;       (#\A  #\X
-;       (#\B  #\Y
-;       (#\C  #\Z
-;       (#\X  #\X
-;       (#\Y  #\Y
-;       (#\Z  #\Z)))
+(define part2
+  (λ (plays)
+    (apply + (map (λ (x) (apply match-strategy x)) plays))))
 
 ; split
 (define split-twos
@@ -66,6 +60,25 @@
       ((list #\A #\X)  3)
       (else            0))))
 
+(define match-strategy
+  (λ (opp strategy)
+    (let* ((winner (λ (hand)
+                     (match hand
+                       (#\A  #\Y)
+                       (#\B  #\Z)
+                       (#\C  #\X))))
+           (loser (λ (hand)
+                    (match hand
+                      (#\A  #\Z)
+                      (#\B  #\X)
+                      (#\C  #\Y)))))
+      (match strategy
+        (#\X (+ 6 (hand-score (winner opp))))  ; win
+        (#\Y (+ 3 (hand-score opp)))  ; draw
+        (#\Z (+ 0 (hand-score (loser opp))))  ; draw
+        )
+                       )))
+
 ; The reader
 (module reader racket
   (provide read-syntax)
@@ -77,11 +90,11 @@
         (when (or (eof-object? next) (char-alphabetic? next))
           next))))
 
-    (define read-syntax
-      (λ (src in)
-        (let* ((hands         (filter-not void? (port->list read-hands in)))
+  (define read-syntax
+    (λ (src in)
+      (let* ((hands         (filter-not void? (port->list read-hands in)))
               ;  (strategy      (map translate hands))
-               (syntax-datum  `(module f rockpaperscissorsdsl
-                                 ,@hands)))
+             (syntax-datum  `(module f rockpaperscissorsdsl
+                               ,@hands)))
           ; (display strategy)
-          (datum->syntax #f syntax-datum)))))
+        (datum->syntax #f syntax-datum)))))
