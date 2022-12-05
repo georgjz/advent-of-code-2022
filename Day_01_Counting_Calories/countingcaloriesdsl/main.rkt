@@ -31,26 +31,26 @@
   (define endby
     (λ (ls del)
       (foldr (λ (elem col)
-                (if (equal? elem del)
-                    (cons empty col)
-                    (cons (cons elem (car col))
-                          (cdr col))))
-              (list empty)
-              ls)))
+               (if (equal? elem del)
+                   (cons empty col)
+                   (cons (cons elem (car col))
+                         (cdr col))))
+             (list empty)
+             ls)))
 
   (define my-read-line
     (λ (port)
       (let* ((next    (read-line port))
-            (number  (unless (eof-object? next) (string->number next))))
-        (if (number? number)
+            (number   (unless (eof-object? next) (string->number next))))
+        (if (number?  number)
             number
             next))))
 
     (define read-syntax
       (λ (src in)
-        (let* ((src    (port->list my-read-line in))
-              (elves  (map (λ (ls) (cons 'elve-calories ls)) (endby (cdr src) "")))
-              (syntax-datum  `(module f countingcaloriesdsl
-                                (part1 ,@elves)
-                                (part2 ,@elves))))
+        (let* ((src          (port->list my-read-line in))
+               (elves         (map (λ (ls) (cons 'elve-calories ls)) (endby (cdr src) "")))
+               (syntax-datum  `(module f countingcaloriesdsl
+                                 (part1 ,@elves)
+                                 (part2 ,@elves))))
           (datum->syntax #f syntax-datum)))))
