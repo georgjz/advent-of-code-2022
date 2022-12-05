@@ -41,7 +41,7 @@
   (define my-read-line
     (λ (port)
       (let* ((next    (read-line port))
-            (number   (unless (eof-object? next) (string->number next))))
+             (number  (unless (eof-object? next) (string->number next))))
         (if (number?  number)
             number
             next))))
