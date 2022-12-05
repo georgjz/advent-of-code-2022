@@ -13,7 +13,7 @@
     (syntax-parse stx
       ((_ hand ...)
        #'(#%module-begin
-           (let ((plays (split-twos hand ...)))))
+           (let ((plays (split-twos hand ...)))
              (display "\nSolution part 1: ")
               (part1 plays)
              ))))))
