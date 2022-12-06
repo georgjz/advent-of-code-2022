@@ -1,5 +1,5 @@
 #lang racket
-(provide (rename-out (campcleanupdsl-begin-module #%module-begin))
+(provide (rename-out (campcleanupdsl-module-begin #%module-begin))
          #%app           ; reexport from racket
          #%top           ; reexport from racket
          #%datum         ; reexport from racket
@@ -8,7 +8,7 @@
          srfi/1)  ; for iota
 
 ; The expander
-(define-syntax campcleanupdsl-begin-module
+(define-syntax campcleanupdsl-module-begin
   (λ (stx)
     (syntax-parse stx
       ((_ a ...)
