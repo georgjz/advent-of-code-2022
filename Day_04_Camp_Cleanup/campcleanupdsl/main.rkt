@@ -1,9 +1,9 @@
 #lang racket
- (provide (rename-out (campcleanupdsl-begin-module #%module-begin))
-          #%app           ; reexport from racket
-          #%top           ; reexport from racket
-          #%datum         ; reexport from racket
-          list)           ; reexport from racket
+(provide (rename-out (campcleanupdsl-begin-module #%module-begin))
+         #%app           ; reexport from racket
+         #%top           ; reexport from racket
+         #%datum         ; reexport from racket
+         list)           ; reexport from racket
 (require (for-syntax syntax/parse)
          srfi/1)  ; for iota
 
