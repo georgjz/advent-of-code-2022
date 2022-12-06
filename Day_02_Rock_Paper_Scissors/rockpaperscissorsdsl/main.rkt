@@ -1,10 +1,6 @@
 #lang racket
 (provide (rename-out (rps-module-begin #%module-begin))
-         ; #%module-begin
-        ;  #%app           ; reexport from racket
-        ;  #%top           ; reexport from racket
-         #%datum         ; reexport from racket
-         )
+         #%datum)        ; reexport from racket
 (require (for-syntax syntax/parse))
 
 ; expander
@@ -14,18 +10,19 @@
       ((_ hand ...)
        #'(#%module-begin
            (let ((plays (split-twos hand ...)))
-             (display "\nSolution part 1: ")
-             (part1 plays)
-             (display "\nSolution part 2: ")
-             ))))))
+             ; FIXME: why?
+             (print (part1 plays))
+             (part2 plays)))))))
 
 ; solutions
 (define part1
   (λ (plays)
+    (display "\nSolution part 1: ")
     (apply + (map (λ (x) (apply score x)) plays))))
 
 (define part2
   (λ (plays)
+    (display "\nSolution part 2: ")
     (apply + (map (λ (x) (apply match-strategy x)) plays))))
 
 ; split
@@ -46,8 +43,7 @@
     (match hand
       (#\A  1)  (#\X  1)
       (#\B  2)  (#\Y  2)
-      (#\C  3)  (#\Z  3)
-      )))
+      (#\C  3)  (#\Z  3))))
 
 (define result-score
   (λ (op me)
@@ -73,11 +69,9 @@
                       (#\B  #\X)
                       (#\C  #\Y)))))
       (match strategy
-        (#\X (+ 6 (hand-score (winner opp))))  ; win
+        (#\Z (+ 6 (hand-score (winner opp))))  ; win
         (#\Y (+ 3 (hand-score opp)))  ; draw
-        (#\Z (+ 0 (hand-score (loser opp))))  ; draw
-        )
-                       )))
+        (#\X (+ 0 (hand-score (loser opp))))))))  ; lose
 
 ; The reader
 (module reader racket
@@ -93,8 +87,6 @@
   (define read-syntax
     (λ (src in)
       (let* ((hands         (filter-not void? (port->list read-hands in)))
-              ;  (strategy      (map translate hands))
              (syntax-datum  `(module f rockpaperscissorsdsl
                                ,@hands)))
-          ; (display strategy)
         (datum->syntax #f syntax-datum)))))
