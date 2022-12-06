@@ -48,7 +48,7 @@
 
     (define read-syntax
       (λ (src in)
-        (let* ((src          (port->list my-read-line in))
+        (let* ((src           (port->list my-read-line in))
                (elves         (map (λ (ls) (cons 'elve-calories ls)) (endby (cdr src) "")))
                (syntax-datum  `(module f countingcaloriesdsl
                                  (part1 ,@elves)
